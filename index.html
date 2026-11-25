@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <script>
+    try {
+      document.querySelector('meta[name="color-scheme"]').content = localStorage.getItem("color-scheme") ?? "light dark";
+    } catch {}
+  </script>
+  <title>Vicinális Dugóhúzó — Digitális Archívum (1921–1982)</title>
+  <meta name="description" content="A Vicinális Dugóhúzó 1921–1982 közötti évfolyamainak lapozható digitális archívuma.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top Header -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button id="btn-sidebar" class="icon-btn" type="button" aria-label="Évfolyamok listája" aria-expanded="true" title="Évfolyamok (M)">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+        <div class="brand">
+          <span class="brand-title">Vicinális Dugóhúzó</span>
+          <span class="brand-sub">Archívum · 1921–1982</span>
+        </div>
+      </div>
+
+      <div class="topbar-center">
+        <label for="issue-select" class="sr-only">Kiadvány választása</label>
+        <select id="issue-select" class="issue-select" aria-label="Kiadvány választása"></select>
+      </div>
+
+      <div class="topbar-right">
+        <div class="toolbar-group" role="group" aria-label="Nézet">
+          <button id="btn-spread" class="icon-btn" type="button" title="Kétoldalas / Egyoldalas nézet (B)" aria-pressed="false">
+            <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M2 5h7a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H2z"></path>
+              <path d="M22 5h-7a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h8z"></path>
+            </svg>
+            <span class="btn-label">Könyv</span>
+          </button>
+          <button id="btn-thumbs" class="icon-btn" type="button" title="Oldal-bélyegképek (T)" aria-pressed="false">
+            <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+            </svg>
+          </button>
+        </div>
+
+        <div class="toolbar-group" role="group" aria-label="Nagyítás">
+          <button id="btn-zoom-out" class="icon-btn" type="button" title="Kicsinyítés (-)" aria-label="Kicsinyítés">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              <line x1="8" y1="11" x2="14" y2="11"></line>
+            </svg>
+          </button>
+          <button id="btn-zoom-reset" class="zoom-readout" type="button" title="Illesztés képernyőhöz (0)">100%</button>
+          <button id="btn-zoom-in" class="icon-btn" type="button" title="Nagyítás (+)" aria-label="Nagyítás">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              <line x1="11" y1="8" x2="11" y2="14"></line>
+              <line x1="8" y1="11" x2="14" y2="11"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="toolbar-group">
+          <a id="btn-download" class="icon-btn" href="#" download title="Aktuális PDF letöltése" aria-label="Aktuális PDF letöltése">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </a>
+          <button id="btn-fullscreen" class="icon-btn" type="button" title="Teljes képernyő (F)" aria-label="Teljes képernyő">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <polyline points="9 21 3 21 3 15"></polyline>
+              <line x1="21" y1="3" x2="14" y2="10"></line>
+              <line x1="3" y1="21" x2="10" y2="14"></line>
+            </svg>
+          </button>
+          <button id="btn-theme" class="icon-btn theme-toggle" type="button" title="Világos / Sötét téma">
+            <span class="theme-opt theme-to-dark">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+              </svg>
+              <span class="sr-only">Váltás sötét témára</span>
+            </span>
+            <span class="theme-opt theme-to-light">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              </svg>
+              <span class="sr-only">Váltás világos témára</span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Body -->
+    <div class="workspace">
+      <!-- Sidebar: Issue Library -->
+      <aside id="sidebar" class="sidebar scroller" aria-label="Évfolyamok">
+        <div class="sidebar-header">
+          <h2>Évfolyamok</h2>
+          <span id="catalog-count" class="badge">15 szám</span>
+        </div>
+        <div id="issue-list" class="issue-list" role="list"></div>
+      </aside>
+
+      <!-- Mobile sidebar backdrop -->
+      <div id="sidebar-backdrop" class="sidebar-backdrop" hidden></div>
+
+      <!-- Reader Stage -->
+      <main class="reader-area">
+        <div id="loading-bar" class="loading-bar" hidden>
+          <div id="loading-progress" class="loading-progress"></div>
+        </div>
+
+        <div id="viewport" class="viewport scroller" tabindex="0" aria-label="Olvasófelület">
+          <div id="status-overlay" class="status-overlay" hidden>
+            <div class="spinner" aria-hidden="true"></div>
+            <p id="status-text">Kiadvány betöltése…</p>
+          </div>
+
+          <button id="nav-prev-overlay" class="edge-nav edge-prev" type="button" aria-label="Előző oldal" title="Előző oldal (←)">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+
+          <div id="book-stage" class="book-stage">
+            <div id="page-slot-left" class="page-slot">
+              <canvas id="canvas-left"></canvas>
+              <span id="label-left" class="page-corner-num"></span>
+            </div>
+            <div id="page-slot-right" class="page-slot" hidden>
+              <canvas id="canvas-right"></canvas>
+              <span id="label-right" class="page-corner-num"></span>
+            </div>
+          </div>
+
+          <button id="nav-next-overlay" class="edge-nav edge-next" type="button" aria-label="Következő oldal" title="Következő oldal (→)">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Thumbnail Strip -->
+        <section id="thumb-strip" class="thumb-strip scroller" aria-label="Oldal-bélyegképek" hidden></section>
+
+        <!-- Bottom Navigation Bar -->
+        <footer class="bottombar">
+          <div class="nav-controls">
+            <button id="btn-first" class="icon-btn" type="button" title="Első oldal (Home)" aria-label="Első oldal">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="11 17 6 12 11 7"></polyline>
+                <polyline points="18 17 13 12 18 7"></polyline>
+              </svg>
+            </button>
+            <button id="btn-prev" class="icon-btn" type="button" title="Előző oldal (←)" aria-label="Előző oldal">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+
+            <form id="page-form" class="page-indicator">
+              <label for="page-input" class="sr-only">Oldalszám</label>
+              <input id="page-input" type="number" min="1" value="1" inputmode="numeric">
+              <span class="page-sep">/</span>
+              <span id="page-total">—</span>
+            </form>
+
+            <button id="btn-next" class="icon-btn" type="button" title="Következő oldal (→)" aria-label="Következő oldal">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+            <button id="btn-last" class="icon-btn" type="button" title="Utolsó oldal (End)" aria-label="Utolsó oldal">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="13 17 18 12 13 7"></polyline>
+                <polyline points="6 17 11 12 6 7"></polyline>
+              </svg>
+            </button>
+          </div>
+
+          <div class="scrubber-wrap">
+            <label for="page-slider" class="sr-only">Gyors lapozás</label>
+            <input id="page-slider" type="range" min="1" max="1" value="1">
+          </div>
+
+          <div class="issue-meta" id="issue-meta"></div>
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
